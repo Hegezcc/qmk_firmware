@@ -100,6 +100,13 @@ ifeq ($(strip $(VIRTSER_ENABLE)), yes)
     OPT_DEFS += -DVIRTSER_ENABLE
 endif
 
+ifeq ($(strip $(TRACKBALL_ENABLE)), yes)
+    OPT_DEFS += -DTRACKBALL_ENABLE
+    COMMON_VPATH += $(DRIVER_PATH)/trackball
+    SRC += $(DRIVER_PATH)/trackball/pimoroni.c
+    QUANTUM_LIB_SRC += i2c_master.c
+endif
+
 ifeq ($(strip $(MOUSEKEY_ENABLE)), yes)
     OPT_DEFS += -DMOUSEKEY_ENABLE
     OPT_DEFS += -DMOUSE_ENABLE

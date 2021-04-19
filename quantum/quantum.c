@@ -40,6 +40,10 @@
 #    include "haptic.h"
 #endif
 
+#ifdef TRACKBALL_ENABLE
+#    include "pimoroni.h"
+#endif
+
 #ifdef AUDIO_ENABLE
 #    ifndef GOODBYE_SONG
 #        define GOODBYE_SONG SONG(GOODBYE_SOUND)
@@ -370,6 +374,9 @@ void matrix_init_quantum() {
 #ifdef HAPTIC_ENABLE
     haptic_init();
 #endif
+#ifdef TRACKBALL_ENABLE
+    trackball_init();
+#endif
 #if defined(BLUETOOTH_ENABLE) && defined(OUTPUT_AUTO_ENABLE)
     set_output(OUTPUT_AUTO);
 #endif
@@ -378,6 +385,9 @@ void matrix_init_quantum() {
 }
 
 void matrix_scan_quantum() {
+#ifdef TRACKBALL_ENABLE
+    trackball_task();
+#endif
 #if defined(AUDIO_ENABLE)
     // There are some tasks that need to be run a little bit
     // after keyboard startup, or else they will not work correctly
