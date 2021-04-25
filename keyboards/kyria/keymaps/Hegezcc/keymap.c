@@ -22,6 +22,9 @@
 #include <stdio.h>
 #include <string.h>
 
+#include "keyboards/kyria/keymaps/manna-harbour_miryoku/config.h"
+#include "keyboards/kyria/keymaps/manna-harbour_miryoku/keymap.c"
+
 #include "print.h"
 
 // Tap-hold mouse button
@@ -496,7 +499,13 @@ static void render_status(void) {
       oled_write_P(PSTR("   ["), false);
 
       // Convert int to char by ascii value
-      char page = (char) screen_show_index + 48;
+      char page;
+      if (screen_show_index < 10) {
+        itoa(screen_show_index, &page, 10);
+      } else {
+        page = '*';
+      }
+      
       oled_write(&page, false);
 
       oled_write_P(PSTR("]"), false);
@@ -549,8 +558,7 @@ void encoder_update_user(uint8_t index, bool clockwise) {
     } else {
       tap_code(KC_VOLU);
     }
-  }
-  else if (index == 1) {
+  } else if (index == 1) {
     switch (biton32(layer_state)) {
       case _ADJUST: {
         #ifdef INFO_OLED_ENABLE
@@ -584,13 +592,29 @@ void encoder_update_user(uint8_t index, bool clockwise) {
         break;
       }
 
-      default: {
-        // Page up/Page down
-        if (clockwise) {
-          tap_code(KC_PGDN);
-        } else {
-          tap_code(KC_PGUP);
+      case _RAISE: {
+        // Scroll horizontally
+        for (int i = 0; i < ENCODER_SCROLL_COUNT; ++i) {
+          if (clockwise) {
+            tap_code(KC_MS_WH_LEFT);
+          } else {
+            tap_code(KC_MS_WH_RIGHT);
+          }
         }
+
+        break;
+      }
+
+      default: {
+        // Scroll vertically
+        for (int i = 0; i < ENCODER_SCROLL_COUNT; ++i) {
+          if (clockwise) {
+            tap_code(KC_MS_WH_DOWN);
+          } else {
+            tap_code(KC_MS_WH_UP);
+          }
+        }
+        break;
       }
     }
   }

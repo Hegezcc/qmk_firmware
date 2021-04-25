@@ -41,8 +41,13 @@
 	#define TRACKBALL_RGBLIGHT 11
 #endif
 
-// Rotary encoder resolution fix
-#define ENCODER_RESOLUTION 2
+#ifdef ENCODER_ENABLE
+  // Rotary encoder resolution fix
+  #define ENCODER_RESOLUTION 2
+
+  // Rotary encoder scroll amount
+  #define ENCODER_SCROLL_COUNT 5
+#endif
 
 // Custom tap-hold handler
 #define TAPHOLD_TIME 200
