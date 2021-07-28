@@ -1,3 +1,5 @@
+#include QMK_KEYBOARD_H
+
 #include "pimoroni.h"
 
 #include "i2c_master.h"
@@ -27,6 +29,9 @@ typedef struct {
     // bit 8: button state
     uint8_t button;
 } input_t;
+
+uint16_t mouse_btn_timer = 0;
+bool mouse_press_in_progress = false;
 
 // Defined in `quantum/matrix_common.c`
 extern matrix_row_t matrix[MATRIX_ROWS];
@@ -115,12 +120,16 @@ void trackball_task(void) {
         send_report = true;
         if (record.pressed) {
             currentReport.buttons |= TRACKBALL_MOUSE_BTN;
+            mouse_press_in_progress = true;
+            mouse_btn_timer = timer_read();
         } else {
             currentReport.buttons &= ~TRACKBALL_MOUSE_BTN;
+            mouse_press_in_progress = false;
         }
     }
 
-    if (record.type & TB_MOVED) {
+    // If press is in progress, skip moving
+    if ((record.type & TB_MOVED) && !mouse_press_in_progress) {
         send_report = true;
 
         #define SIGN(x) ((x > 0) - (x < 0))

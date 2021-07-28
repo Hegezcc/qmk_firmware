@@ -8,10 +8,6 @@ RAW_ENABLE = yes            # Enable RAW HID communication to PC
 WPM_ENABLE = yes            # Bongocat!
 NO_USB_STARTUP_CHECK = yes  # Fix usb startup check for split keyboard
 
-CONSOLE_ENABLE = no         # Debug mode
-
-USER_NAME := manna-harbour_miryoku # Miryoku enable
-
 TAP_DANCE_ENABLE = no
 STENO_ENABLE = no
 BOOTMAGIC_ENABLE =no
